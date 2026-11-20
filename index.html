@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TECHNOLAB | Geleceğin Teknoloji Laboratuvarı</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Orbitron & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#070a11',
+                            card: '#0e1424',
+                            border: '#1e293b',
+                            cyan: '#00f3ff',
+                            purple: '#9d4edd',
+                            magenta: '#ff007f',
+                            emerald: '#10b981'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Custom Scrollbar & Cyber Glow Effects */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070a11;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff;
+        }
+
+        .glow-cyan {
+            text-shadow: 0 0 12px rgba(0, 243, 255, 0.6), 0 0 25px rgba(0, 243, 255, 0.3);
+        }
+        .glow-purple {
+            text-shadow: 0 0 12px rgba(157, 78, 221, 0.6), 0 0 25px rgba(157, 78, 221, 0.3);
+        }
+        .box-glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.25), inset 0 0 15px rgba(0, 243, 255, 0.1);
+        }
+        .box-glow-purple {
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.25), inset 0 0 15px rgba(157, 78, 221, 0.1);
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(14, 20, 36, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 243, 255, 0.15);
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 243, 255, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(0, 243, 255, 0.25);
+        }
+
+        /* Cyber Grid Overlay Animation */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 243, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 243, 255, 0.04) 1px, transparent 1px);
+        }
+
+        /* Scanline Animation Effect */
+        .scanline {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.6), transparent);
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: scan 6s linear infinite;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; opacity: 0.8; }
+            50% { opacity: 0.3; }
+            100% { top: 100%; opacity: 0.8; }
+        }
+
+        /* Neon Border Pulse */
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(0, 243, 255, 0.4); }
+            50% { border-color: rgba(157, 78, 221, 0.7); }
+        }
+        .cyber-border-pulse {
+            animation: pulse-border 4s infinite ease-in-out;
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(to right, #00f3ff var(--budget-progress, 0%), #1e293b var(--budget-progress, 0%));
+            height: 6px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #00f3ff;
+            box-shadow: 0 0 10px #00f3ff;
+            cursor: pointer;
+        }
+        input[type=range]::-moz-range-thumb {
+            height: 18px;
+            width: 18px;
+            border: 0;
+            border-radius: 50%;
+            background: #00f3ff;
+            box-shadow: 0 0 10px #00f3ff;
+            cursor: pointer;
+        }
+        input[type=range]::-moz-range-track {
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, #00f3ff var(--budget-progress, 0%), #1e293b var(--budget-progress, 0%));
+        }
+        .budget-preset-btn[aria-pressed="true"] {
+            border-color: #00f3ff;
+            color: #00f3ff;
+        }
+    </style>
+</head>
+<body class="bg-cyber-bg text-slate-100 font-inter selection:bg-cyber-cyan selection:text-slate-950 relative overflow-x-hidden">
+
+    <!-- Background Canvas Particles -->
+    <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+    
+    <!-- Background Grid -->
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+
+    <!-- Scanline Laser Effect -->
+    <div class="scanline"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-cyber-card border border-cyber-cyan text-cyber-cyan px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl">
+        <i class="fa-solid fa-circle-check text-xl"></i>
+        <span id="toast-message" class="text-sm font-medium">İşlem Başarılı</span>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header id="hero" class="sticky top-0 z-40 backdrop-blur-xl bg-cyber-bg/80 border-b border-slate-800/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-cyan via-cyber-purple to-cyber-magenta p-[2px] shadow-lg shadow-cyber-cyan/20 group-hover:shadow-cyber-cyan/40 transition-all duration-300">
+                    <div class="w-full h-full bg-cyber-bg rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-microchip text-cyber-cyan group-hover:rotate-45 transition-transform duration-300"></i>
+                    </div>
+                </div>
+                <span class="font-orbitron text-2xl font-black tracking-wider text-white">
+                    TECHNO<span class="text-cyber-cyan glow-cyan">LAB</span>
+                </span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                <a href="#hero" class="hover:text-cyber-cyan transition-colors py-2">Ana Sayfa</a>
+                <a href="#setup-builder" class="hover:text-cyber-cyan transition-colors py-2">Teknolojiler</a>
+                <a href="#projeler" class="hover:text-cyber-cyan transition-colors py-2">İnovasyon Lab</a>
+                <a href="#setup-builder" class="hover:text-cyber-cyan transition-colors py-2 text-cyber-magenta font-semibold">Setup Sihirbazı</a>
+                <a href="#projeler" class="hover:text-cyber-cyan transition-colors py-2">Projeler</a>
+                <a href="#terminal" class="hover:text-cyber-cyan transition-colors py-2">Terminal CLI</a>
+                <a href="#iletisim" class="hover:text-cyber-cyan transition-colors py-2">İletişim</a>
+            </nav>
+
+            <!-- CTA Button -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#setup-builder" class="relative group px-6 py-2.5 rounded-xl font-orbitron text-xs font-bold tracking-wider text-white overflow-hidden shadow-lg shadow-cyber-cyan/20 hover:shadow-cyber-cyan/50 transition-all duration-300">
+                    <span class="absolute inset-0 bg-gradient-to-r from-cyber-cyan via-cyber-purple to-cyber-magenta group-hover:scale-105 transition-transform duration-300"></span>
+                    <span class="relative flex items-center space-x-2">
+                        <i class="fa-solid fa-bolt text-xs"></i>
+                        <span>LAB'I BAŞLAT</span>
+                    </span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" type="button" aria-label="Menüyü aç" aria-controls="mobile-menu" aria-expanded="false" class="md:hidden p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cyber-card border-b border-slate-800 px-4 pt-4 pb-6 space-y-3">
+            <a href="#hero" class="mobile-link block px-4 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-cyber-cyan">Ana Sayfa</a>
+            <a href="#setup-builder" class="mobile-link block px-4 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-cyber-cyan">Teknolojiler</a>
+            <a href="#projeler" class="mobile-link block px-4 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-cyber-cyan">İnovasyon Lab</a>
+            <a href="#setup-builder" class="mobile-link block px-4 py-2 rounded-lg text-slate-200 hover:bg-slate-800 text-cyber-magenta font-semibold">Setup Sihirbazı</a>
+            <a href="#projeler" class="mobile-link block px-4 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-cyber-cyan">Projeler</a>
+            <a href="#terminal" class="mobile-link block px-4 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-cyber-cyan">Terminal CLI</a>
+            <a href="#iletisim" class="mobile-link block px-4 py-2 rounded-lg text-slate-200 hover:bg-slate-800 hover:text-cyber-cyan">İletişim</a>
+        </div>
+    </header>
+
+            <!-- Simulator Log Bar -->
+            <div class="mt-6 font-mono text-xs text-slate-400 bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center space-x-2">
+                <span class="text-cyber-cyan">&gt;</span>
+                <span id="sim-log-text" class="truncate">Sistem stabil. Parametre değişiklikleri anlık olarak uygulanıyor...</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+<!-- GAMER SETUP & BUDGET BUILDER SECTION -->
+<section id="setup-builder" class="py-24 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-14">
+            <span class="px-4 py-1.5 rounded-full bg-cyber-magenta/20 text-cyber-magenta border border-cyber-magenta/40 text-xs font-mono uppercase tracking-widest inline-block mb-3">
+                <i class="fa-solid fa-gamepad mr-1"></i> GAMER RIG CONFIGURATOR
+            </span>
+            <h2 class="font-orbitron text-3xl sm:text-4xl font-bold text-white">
+                Bütçene Özel Gamer Setup Sihirbazı
+            </h2>
+            <p class="mt-4 text-slate-400 text-sm sm:text-base">
+                Bütçeni belirle; seçtiğin bileşen ve ekipmanlara paylaştırılmış, toplamı bütçeni aşmayan önerini anında gör.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Controls & Budget Selector -->
+            <div class="lg:col-span-5 glass-card rounded-2xl p-6 sm:p-8 border-slate-800 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                        <h3 class="font-orbitron font-bold text-lg text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-calculator text-cyber-magenta"></i>
+                            <span>BÜTÇE OPTİMİZASYONU</span>
+                        </h3>
+                        <span id="preset-badge" class="text-[10px] font-mono text-cyber-cyan bg-cyber-cyan/10 border border-cyber-cyan/30 px-2.5 py-1 rounded">
+                            MID-RANGE
+                        </span>
+                    </div>
+
+                    <!-- Budget Input Display & Slider -->
+                    <div class="mb-8 bg-slate-950 p-5 rounded-xl border border-slate-800">
+                        <div class="flex justify-between items-center gap-3 mb-4">
+                            <label for="budget-input" class="text-xs font-mono text-slate-400">TOPLAM BÜTÇE:</label>
+                            <div class="flex items-center gap-2">
+                                <input id="budget-input" type="number" min="15000" max="150000" step="2500" value="45000" inputmode="numeric" aria-label="Toplam bilgisayar bütçesi, TL" class="w-32 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-right font-orbitron text-lg font-black text-cyber-cyan focus:border-cyber-cyan focus:outline-none">
+                                <span class="font-mono text-sm text-slate-400">TL</span>
+                            </div>
+                        </div>
+                        <input id="budget-slider" type="range" min="15000" max="150000" step="2500" value="45000" aria-label="Bilgisayar bütçesini kaydırarak ayarla" aria-controls="budget-input total-calculated-price setup-parts-list" aria-valuetext="45.000 TL" class="w-full">
+                        <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-2">
+                            <span>15.000 TL</span>
+                            <span>75.000 TL</span>
+                            <span>150.000 TL</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Preset Buttons -->
+                    <div class="mb-6 space-y-2">
+                        <label class="text-xs font-mono text-slate-400 block">HAZIR BÜTÇE MODLARI:</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" data-budget="20000" data-mode="ENTRY" aria-pressed="false" class="budget-preset-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300 hover:border-cyber-cyan transition-colors text-left flex flex-col">
+                                <span class="font-bold text-white">Bütçe Dostu</span>
+                                <span class="text-[10px] text-slate-500">20.000 TL (1080p)</span>
+                            </button>
+                            <button type="button" data-budget="45000" data-mode="MID" aria-pressed="true" class="budget-preset-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300 hover:border-cyber-cyan transition-colors text-left flex flex-col">
+                                <span class="font-bold">F/P Canavarı</span>
+                                <span class="text-[10px] text-slate-400">45.000 TL (2K Gaming)</span>
+                            </button>
+                            <button type="button" data-budget="85000" data-mode="HIGH" aria-pressed="false" class="budget-preset-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300 hover:border-cyber-purple transition-colors text-left flex flex-col">
+                                <span class="font-bold text-white">Ultra Performa</span>
+                                <span class="text-[10px] text-slate-500">85.000 TL (4K Ray-Tracing)</span>
+                            </button>
+                            <button type="button" data-budget="140000" data-mode="GOD" aria-pressed="false" class="budget-preset-btn p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300 hover:border-cyber-magenta transition-colors text-left flex flex-col">
+                                <span class="font-bold text-cyber-magenta">Streamer God-Tier</span>
+                                <span class="text-[10px] text-slate-500">140.000 TL (Extreme)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Category Allocation Toggles -->
+                    <div class="space-y-2 mb-6">
+                        <label class="text-xs font-mono text-slate-400 block">DAHİL EDİLECEK EKİPMANLAR:</label>
+                        <div class="grid grid-cols-3 gap-2 font-mono text-xs">
+                            <label class="flex items-center space-x-2 bg-slate-950 p-2.5 rounded-lg border border-slate-800 cursor-pointer">
+                                <input type="checkbox" id="inc-pc" checked class="accent-cyber-cyan">
+                                <span class="text-slate-300">Kasa/PC</span>
+                            </label>
+                            <label class="flex items-center space-x-2 bg-slate-950 p-2.5 rounded-lg border border-slate-800 cursor-pointer">
+                                <input type="checkbox" id="inc-monitor" checked class="accent-cyber-cyan">
+                                <span class="text-slate-300">Monitör</span>
+                            </label>
+                            <label class="flex items-center space-x-2 bg-slate-950 p-2.5 rounded-lg border border-slate-800 cursor-pointer">
+                                <input type="checkbox" id="inc-peripherals" checked class="accent-cyber-cyan">
+                                <span class="text-slate-300">Ekipman</span>
+                            </label>
+                            <label class="flex items-center space-x-2 bg-slate-950 p-2.5 rounded-lg border border-slate-800 cursor-pointer">
+                                <input type="checkbox" id="inc-chair" class="accent-cyber-cyan">
+                                <span class="text-slate-300">Koltuk/Masa</span>
+                            </label>
+                            <label class="flex items-center space-x-2 bg-slate-950 p-2.5 rounded-lg border border-slate-800 cursor-pointer">
+                                <input type="checkbox" id="inc-stream" class="accent-cyber-cyan">
+                                <span class="text-slate-300">Yayın Gear</span>
+                            </label>
+                            <button id="refresh-setup" type="button" class="bg-slate-900 border border-slate-700 hover:border-cyber-cyan text-cyber-cyan rounded-lg p-2 flex items-center justify-center">
+                                <i class="fa-solid fa-rotate mr-1"></i> Yenile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Action Footer Buttons -->
+                <div class="space-y-2 pt-4 border-t border-slate-800">
+                    <button onclick="copySetupToClipboard()" class="w-full py-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyber-cyan text-slate-200 text-xs font-mono font-bold uppercase transition-all flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-copy text-cyber-cyan"></i>
+                        <span>Sistemi Kopyala</span>
+                    </button>
+                    <button onclick="openSpecialOfferModal()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyber-magenta via-purple-600 to-cyber-cyan text-white text-xs font-orbitron font-bold uppercase tracking-wider shadow-lg shadow-cyber-magenta/20 hover:scale-[1.01] transition-transform flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span>TECHNOLAB Özel Fiyat Teklifi Al</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Generated Parts & Breakdown Output -->
+            <div class="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 border-slate-800 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                        <h3 class="font-orbitron font-bold text-lg text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-list-check text-cyber-cyan"></i>
+                            <span>ÖNERİLEN OPTİMAL BİLEŞEN LİSTESİ</span>
+                        </h3>
+                        <span id="setup-score" aria-live="polite" class="text-xs font-mono text-cyber-emerald bg-cyber-emerald/10 border border-cyber-emerald/30 px-3 py-1 rounded-full">
+                            Dağılım: %100
+                        </span>
+                    </div>
+
+                    <!-- Progress Bar Budget Share -->
+                    <div class="mb-6">
+                        <div class="flex flex-wrap justify-between gap-x-3 gap-y-1 text-xs font-mono text-slate-400 mb-2">
+                            <span>Bütçe Dağılım Oranı:</span>
+                            <span id="allocation-ratios" class="text-slate-300">PC %60 | Monitör %20 | Ekipman %12 | Koltuk/Masa %5 | Yayın %3</span>
+                        </div>
+                        <div id="allocation-bar" role="img" aria-label="Bütçe dağılımı" class="w-full h-3 bg-slate-950 rounded-full overflow-hidden flex border border-slate-800">
+                            <div id="bar-pc" class="bg-cyber-cyan h-full transition-all duration-300" style="width: 60%"></div>
+                            <div id="bar-mon" class="bg-cyber-purple h-full transition-all duration-300" style="width: 20%"></div>
+                            <div id="bar-peri" class="bg-cyber-magenta h-full transition-all duration-300" style="width: 12%"></div>
+                            <div id="bar-chair" class="bg-amber-400 h-full transition-all duration-300" style="width: 5%"></div>
+                            <div id="bar-stream" class="bg-emerald-400 h-full transition-all duration-300" style="width: 3%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Parts List Container -->
+                    <div id="setup-parts-list" aria-live="polite" aria-relevant="text additions removals" class="space-y-3 font-mono text-xs sm:text-sm max-h-96 overflow-y-auto pr-1">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Total Calculated Price Footer -->
+                <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between bg-slate-950/80 p-4 rounded-xl border">
+                    <div>
+                        <div class="text-[10px] font-mono text-slate-400">HESAPLANAN TOPLAM TUTAR</div>
+                        <div id="total-calculated-price" class="font-orbitron text-xl sm:text-2xl font-black text-cyber-cyan">44.850 TL</div>
+                    </div>
+                    <div class="text-right font-mono text-[11px] text-slate-400">
+                        <div>PC bütçesine göre profil: <span id="fps-estimate" class="text-cyber-emerald font-bold">2K / Yüksek</span></div>
+                        <div>Stok Durumu: <span class="text-cyber-cyan">Tüm Parçalar Hazır</span></div>
+                    </div>
+                </div>
+                <p class="mt-3 text-right text-[10px] font-mono text-slate-500">Fiyatlar ve oyun profili tahminidir; gerçek ürün ve performans seçilen parçalara göre değişir.</p>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- PROJELER SHOWCASE SECTION -->
+    <section id="projeler" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <div class="text-xs font-mono text-cyber-cyan tracking-widest uppercase mb-3">
+                        // GELECEĞİN PROJELERİ
+                    </div>
+                    <h2 class="font-orbitron text-3xl sm:text-4xl font-bold text-white">
+                        Öne Çıkan Ar-Ge Çalışmaları
+                    </h2>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="mt-6 md:mt-0 flex flex-wrap gap-2">
+                    <button onclick="filterProjects('all')" class="proj-filter-btn active px-4 py-2 rounded-xl text-xs font-mono border border-cyber-cyan bg-cyber-cyan text-slate-950 font-bold transition-all">HEPSİ</button>
+                    <button onclick="filterProjects('ai')" class="proj-filter-btn px-4 py-2 rounded-xl text-xs font-mono border border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700 transition-all">YAPAY ZEKA</button>
+                    <button onclick="filterProjects('cyber')" class="proj-filter-btn px-4 py-2 rounded-xl text-xs font-mono border border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700 transition-all">SİBER GÜVENLİK</button>
+                    <button onclick="filterProjects('otonom')" class="proj-filter-btn px-4 py-2 rounded-xl text-xs font-mono border border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700 transition-all">OTONOM</button>
+                </div>
+            </div>
+
+            <!-- Projects Grid -->
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project 1 -->
+                <div class="project-card glass-card rounded-2xl overflow-hidden border border-slate-800 cursor-pointer group" data-category="cyber" onclick="openProjectModal(1)">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Project 1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cyber-bg via-transparent to-transparent"></div>
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-slate-950/80 border border-cyber-cyan/40 text-cyber-cyan text-[10px] font-mono uppercase">
+                            Siber Güvenlik
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-orbitron text-lg font-bold text-white mb-2 group-hover:text-cyber-cyan transition-colors">Aegis Kuantum Güvenlik Duvarı</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Post-kuantum kriptografik algoritmalar ile kırılması imkansız veri güvenlik kalkanı.</p>
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-t border-slate-800/80 pt-4">
+                            <span>Sürüm: 3.4.0</span>
+                            <span class="text-cyber-cyan flex items-center space-x-1">
+                                <span>Detaylar</span>
+                                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card glass-card rounded-2xl overflow-hidden border border-slate-800 cursor-pointer group" data-category="ai" onclick="openProjectModal(2)">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Project 2" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cyber-bg via-transparent to-transparent"></div>
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-slate-950/80 border border-cyber-purple/40 text-cyber-purple text-[10px] font-mono uppercase">
+                            Yapay Zeka
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-orbitron text-lg font-bold text-white mb-2 group-hover:text-cyber-purple transition-colors">Synapse Nöral Karar Motoru</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Milyarlarca veriyi mikrosaniyeler içinde işleyen derin öğrenme karar destek altyapısı.</p>
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-t border-slate-800/80 pt-4">
+                            <span>Sürüm: 5.1.2</span>
+                            <span class="text-cyber-purple flex items-center space-x-1">
+                                <span>Detaylar</span>
+                                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card glass-card rounded-2xl overflow-hidden border border-slate-800 cursor-pointer group" data-category="otonom" onclick="openProjectModal(3)">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=800&q=80" alt="Project 3" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cyber-bg via-transparent to-transparent"></div>
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-slate-950/80 border border-cyber-magenta/40 text-cyber-magenta text-[10px] font-mono uppercase">
+                            Otonom
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-orbitron text-lg font-bold text-white mb-2 group-hover:text-cyber-magenta transition-colors">Chrono Drone Sürü Ağı</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Zorlu şartlarda kolektif zekayla hareket eden arama-kurtarma drone sürüsü.</p>
+                        <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-t border-slate-800/80 pt-4">
+                            <span>Sürüm: 2.0.8</span>
+                            <span class="text-cyber-magenta flex items-center space-x-1">
+                                <span>Detaylar</span>
+                                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- TERMINAL CLI SECTION -->
+    <section id="terminal" class="py-24 bg-cyber-card/30 border-t border-slate-800/80 relative z-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-mono text-cyber-cyan tracking-widest uppercase mb-2 block">// DEVELOPER SHELL</span>
+                <h2 class="font-orbitron text-3xl font-bold text-white">technolab-cli Simulator</h2>
+                <p class="text-slate-400 text-sm mt-2">Komut satırından doğrudan laboratuvar sistemlerine erişin. 'help' yazarak başlayın.</p>
+            </div>
+
+            <!-- Terminal Window -->
+            <div class="bg-slate-950 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden font-mono text-xs sm:text-sm">
+                <!-- Header -->
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                        <span class="ml-2 text-xs text-slate-400">technolab@quantum-node:~</span>
+                    </div>
+                    <span class="text-[10px] text-cyber-cyan bg-cyber-cyan/10 border border-cyber-cyan/30 px-2 py-0.5 rounded">BASH v5.2</span>
+                </div>
+                
+                <!-- Terminal Body -->
+                <div id="terminal-body" class="p-4 sm:p-6 h-72 overflow-y-auto space-y-3 text-slate-300">
+                    <div>Welcome to TECHNOLAB Interactive CLI v2.4</div>
+                    <div class="text-slate-500">Type <span class="text-cyber-cyan">'help'</span> to see available commands.</div>
+                </div>
+
+                <!-- Input Line -->
+                <div class="bg-slate-900/60 px-4 py-3 border-t border-slate-800 flex items-center space-x-2">
+                    <span class="text-cyber-cyan font-bold">visitor@technolab:~$</span>
+                    <input id="cli-input" type="text" placeholder="Komut yazın... (örn: help, status, projects)" class="w-full bg-transparent border-none text-white focus:outline-none font-mono text-xs sm:text-sm">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- İLETİŞİM SECTION -->
+    <section id="iletisim" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- Info Column -->
+                <div class="lg:col-span-5 space-y-8">
+                    <div>
+                        <div class="text-xs font-mono text-cyber-cyan tracking-widest uppercase mb-3">// İLETİŞİME GEÇİN</div>
+                        <h2 class="font-orbitron text-3xl sm:text-4xl font-bold text-white mb-4">Geleceği Birlikte Tasarlayalım</h2>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Projeniz veya Ar-Ge ortaklığı talepleriniz için uzman mühendis ekibimizle anında iletişime geçin.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="glass-card p-4 rounded-xl flex items-center space-x-4 border-slate-800">
+                            <div class="w-12 h-12 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/30 flex items-center justify-center text-cyber-cyan">
+                                <i class="fa-solid fa-location-dot text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-mono text-slate-400">MERKEZ LABORATUVAR</div>
+                                <div class="text-sm font-semibold text-white">Maslak Teknoloji Vadisi, No:42, İstanbul</div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-xl flex items-center space-x-4 border-slate-800">
+                            <div class="w-12 h-12 rounded-lg bg-cyber-purple/10 border border-cyber-purple/30 flex items-center justify-center text-cyber-purple">
+                                <i class="fa-solid fa-envelope text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-mono text-slate-400">E-POSTA</div>
+                                <div class="text-sm font-semibold text-white">contact@technolab.io</div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-xl flex items-center space-x-4 border-slate-800">
+                            <div class="w-12 h-12 rounded-lg bg-cyber-magenta/10 border border-cyber-magenta/30 flex items-center justify-center text-cyber-magenta">
+                                <i class="fa-solid fa-phone text-lg"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-mono text-slate-400">TELEFON</div>
+                                <div class="text-sm font-semibold text-white">+90 (212) 888 00 00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Column -->
+                <div class="lg:col-span-7 glass-card p-8 rounded-2xl border-slate-800">
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-mono text-slate-300 mb-2">ADINIZ SOYADINIZ *</label>
+                                <input type="text" required placeholder="Dr. Alex Mercer" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyber-cyan transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-slate-300 mb-2">E-POSTA ADRESİNİZ *</label>
+                                <input type="email" required placeholder="alex@quantum.io" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyber-cyan transition-colors">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-slate-300 mb-2">KONU ODAĞI</label>
+                            <select class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-300 focus:outline-none focus:border-cyber-cyan transition-colors">
+                                <option>Yapay Zeka Ar-Ge İşbirliği</option>
+                                <option>Kuantum Güvenlik Entegrasyonu</option>
+                                <option>Otonom Sistem Projesi</option>
+                                <option>Genel Bilgi Talebi</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-slate-300 mb-2">MESAJINIZ *</label>
+                            <textarea rows="4" required placeholder="Proje detaylarınızı buraya yazın..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyber-cyan transition-colors"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-cyber-cyan via-blue-600 to-cyber-purple font-orbitron font-bold text-slate-950 uppercase tracking-wider text-sm shadow-xl shadow-cyber-cyan/20 hover:shadow-cyber-cyan/40 transition-all">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> MESAJI GÖNDER
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/90 py-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                
+                <div class="flex items-center space-x-3">
+                    <span class="font-orbitron text-xl font-black text-white">
+                        TECHNO<span class="text-cyber-cyan">LAB</span>
+                    </span>
+                    <span class="text-slate-600">|</span>
+                    <span class="text-xs font-mono text-slate-400">© 2026 TECHNOLAB INC. TÜM HAKLARI SAKLIDIR.</span>
+                </div>
+
+                <!-- Live Status Badge -->
+                <div class="flex items-center space-x-3 text-xs font-mono text-cyber-emerald bg-cyber-emerald/10 border border-cyber-emerald/30 px-4 py-2 rounded-full">
+                    <span class="w-2 h-2 rounded-full bg-cyber-emerald animate-pulse"></span>
+                    <span>SİSTEM DURUMU: %100 OPERASYONEL</span>
+                </div>
+
+                <!-- Social Icons -->
+                <div class="flex space-x-4 text-slate-400 text-lg">
+                    <a href="#" class="hover:text-cyber-cyan transition-colors"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="hover:text-cyber-cyan transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="hover:text-cyber-cyan transition-colors"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" class="hover:text-cyber-cyan transition-colors"><i class="fa-brands fa-discord"></i></a>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- PROJECT MODAL -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+        <div class="glass-card max-w-2xl w-full rounded-2xl p-6 sm:p-8 border-cyber-cyan/50 relative shadow-2xl">
+            <button onclick="closeProjectModal()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content">
+                <!-- Dynamic Content Loaded via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CODE -->
+    <script>
+        // -------------------------------------------------------------
+        // 1. BACKGROUND PARTICLE CANVAS
+        // -------------------------------------------------------------
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let particles = [];
+
+        function resizeBgCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeBgCanvas);
+        resizeBgCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * bgCanvas.width;
+                this.y = Math.random() * bgCanvas.height;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 2 + 1;
+                this.color = Math.random() > 0.5 ? '#00f3ff' : '#9d4edd';
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > bgCanvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > bgCanvas.height) this.vy *= -1;
+            }
+            draw() {
+                bgCtx.beginPath();
+                bgCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                bgCtx.fillStyle = this.color;
+                bgCtx.shadowBlur = 10;
+                bgCtx.shadowColor = this.color;
+                bgCtx.fill();
+                bgCtx.shadowBlur = 0;
+            }
+        }
+
+        for (let i = 0; i < 70; i++) particles.push(new Particle());
+
+        function animateBg() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            
+            // Draw connections
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        bgCtx.beginPath();
+                        bgCtx.moveTo(particles[i].x, particles[i].y);
+                        bgCtx.lineTo(particles[j].x, particles[j].y);
+                        bgCtx.strokeStyle = `rgba(0, 243, 255, ${1 - dist / 120 * 0.8})`;
+                        bgCtx.lineWidth = 0.5;
+                        bgCtx.stroke();
+                    }
+                }
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        // -------------------------------------------------------------
+        // 2. HERO TYPING EFFECT & COUNTERS
+        // -------------------------------------------------------------
+        const typedTextSpan = document.getElementById('typed-text');
+        const textArray = [
+            "Kuantum İşlemciler ile Hızlandırılmış.",
+            "Otonom Yapay Zeka Çekirdekleri.",
+            "Kırılması İmkansız Siber Güvenlik Mimarisi."
+        ];
+        let textArrayIndex = 0;
+        let charIndex = 0;
+
+        function type() {
+            if (charIndex < textArray[textArrayIndex].length) {
+                typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 60);
+            } else {
+                setTimeout(erase, 2000);
+            }
+        }
+
+        function erase() {
+            if (charIndex > 0) {
+                typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, 30);
+            } else {
+                textArrayIndex = (textArrayIndex + 1) % textArray.length;
+                setTimeout(type, 500);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => setTimeout(type, 1000));
+
+        // Animated Counters
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+
+            const updateCounter = () => {
+                current += step;
+                if (current < target) {
+                    counter.innerText = target % 1 === 0 ? Math.floor(current) : current.toFixed(1);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            updateCounter();
+        });
+
+        // -------------------------------------------------------------
+        // 3. INTERACTIVE SIMULATOR CANVAS & LOGIC
+        // -------------------------------------------------------------
+        const simCanvas = document.getElementById('sim-canvas');
+        const simCtx = simCanvas.getContext('2d');
+        let simPulseActive = false;
+        let pulseRadius = 0;
+
+        function resizeSimCanvas() {
+            if (!simCanvas.parentElement) return;
+            simCanvas.width = simCanvas.parentElement.clientWidth;
+            simCanvas.height = simCanvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeSimCanvas);
+        resizeSimCanvas();
+
+        const sliderSpeed = document.getElementById('slider-ai-speed');
+        const sliderSync = document.getElementById('slider-quantum-sync');
+        const sliderShielding = document.getElementById('slider-shielding');
+
+        sliderSpeed.addEventListener('input', updateLabStats);
+        sliderSync.addEventListener('input', updateLabStats);
+        sliderShielding.addEventListener('input', updateLabStats);
+
+        function updateLabStats() {
+            const speed = parseFloat(sliderSpeed.value);
+            const sync = parseInt(sliderSync.value);
+            const shield = parseInt(sliderShielding.value);
+
+            document.getElementById('val-ai-speed').innerText = speed.toFixed(1) + ' GHz';
+            document.getElementById('val-quantum-sync').innerText = sync + '%';
+            document.getElementById('val-shielding').innerText = shield === 3 ? 'MAX' : (shield === 2 ? 'ORTA' : 'DÜŞÜK');
+
+            // Dynamic HUD calculations
+            const tflops = (speed * (sync / 50) * 8.5).toFixed(1);
+            const temp = Math.round(30 + speed * 2 + (sync / 20));
+            const throughput = (speed * 0.25).toFixed(1);
+
+            document.getElementById('hud-tflops').innerText = tflops + ' TFLOPS';
+            document.getElementById('hud-temp').innerText = temp + '°C';
+            document.getElementById('hud-throughput').innerText = throughput + ' TB/s';
+
+            document.getElementById('sim-log-text').innerText = 
+                `Parametre Güncellendi: AI=${speed}GHz | Q-Sync=${sync}% | Temp=${temp}°C`;
+        }
+
+        function setLabPreset(preset) {
+            if (preset === 'eco') {
+                sliderSpeed.value = 2.4;
+                sliderSync.value = 50;
+                sliderShielding.value = 1;
+            } else if (preset === 'balanced') {
+                sliderSpeed.value = 4.8;
+                sliderSync.value = 85;
+                sliderShielding.value = 3;
+            } else if (preset === 'overclock') {
+                sliderSpeed.value = 9.8;
+                sliderSync.value = 99;
+                sliderShielding.value = 3;
+            }
+            updateLabStats();
+            showToast('Simülatör Modu: ' + preset.toUpperCase());
+        }
+
+        function triggerPulse() {
+            simPulseActive = true;
+            pulseRadius = 0;
+            showToast('Kuantum Şok Dalgası Tetiklendi!');
+        }
+
+        function renderSimulator() {
+            simCtx.clearRect(0, 0, simCanvas.width, simCanvas.height);
+            const centerX = simCanvas.width / 2;
+            const centerY = simCanvas.height / 2;
+            const speed = parseFloat(sliderSpeed.value);
+            const sync = parseInt(sliderSync.value);
+
+            // Draw Core
+            simCtx.beginPath();
+            simCtx.arc(centerX, centerY, 30 + (speed * 2), 0, Math.PI * 2);
+            simCtx.fillStyle = 'rgba(0, 243, 255, 0.2)';
+            simCtx.strokeStyle = '#00f3ff';
+            simCtx.lineWidth = 2;
+            simCtx.fill();
+            simCtx.stroke();
+
+            // Rotating Rings
+            const time = Date.now() * 0.002 * (speed / 3);
+            simCtx.save();
+            simCtx.translate(centerX, centerY);
+            simCtx.rotate(time);
+            simCtx.beginPath();
+            simCtx.arc(0, 0, 60 + (sync * 0.3), 0, Math.PI * 1.5);
+            simCtx.strokeStyle = '#9d4edd';
+            simCtx.lineWidth = 3;
+            simCtx.stroke();
+            simCtx.restore();
+
+            // Pulse wave effect
+            if (simPulseActive) {
+                pulseRadius += 6;
+                simCtx.beginPath();
+                simCtx.arc(centerX, centerY, pulseRadius, 0, Math.PI * 2);
+                simCtx.strokeStyle = `rgba(255, 0, 127, ${1 - pulseRadius / 250})`;
+                simCtx.lineWidth = 4;
+                simCtx.stroke();
+                if (pulseRadius > 250) simPulseActive = false;
+            }
+
+            requestAnimationFrame(renderSimulator);
+        }
+        renderSimulator();
+
+        // -------------------------------------------------------------
+        // 4. PROJECT SHOWCASE FILTERS & MODAL
+        // -------------------------------------------------------------
+        const projectData = {
+            1: {
+                title: "Aegis Kuantum Güvenlik Duvarı",
+                category: "Siber Güvenlik",
+                image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
+                desc: "Aegis, kuantum bilgisayarların mevcut şifreleme yöntemlerini çözme potansiyeline karşı geliştirilmiş post-kuantum kriptografik güvenlik duvarıdır. Ağ trafiğini yapay zeka ile anlık izleyerek olası anormallikleri mikrosaniyeler içinde izole eder.",
+                techs: ["Quantum Cryptography", "AI Threat Detection", "Zero-Trust Protocol"],
+                metrics: { accuracy: "%99.99", latency: "< 0.2ms", nodes: "85.000+" }
+            },
+            2: {
+                title: "Synapse Nöral Karar Motoru",
+                category: "Yapay Zeka",
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+                desc: "Synapse Core, milyarlarca parametreyi düşük güç tüketimiyle işleyebilen yeni nesil derin öğrenme altyapısıdır. Tıp, finans ve otonom ulaşım sektörlerinde yüksek doğruluklu tahminleme imkanı sunar.",
+                techs: ["Deep Learning", "LLM Infrastructure", "Neural Compression"],
+                metrics: { accuracy: "%98.7", latency: "1.1ms", nodes: "120.000+" }
+            },
+            3: {
+                title: "Chrono Drone Sürü Ağı",
+                category: "Otonom Robotik",
+                image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=800&q=80",
+                desc: "Chrono Drone Swarm, afet alanlarında ve zorlu arazi şartlarında birbiriyle iletişime geçerek haritalama ve kurtarma görevi üstlenen otonom hava araçları kümesidir. Merkezi kontrol noktası olmadan kararlar alır.",
+                techs: ["Swarm AI", "Mesh Communication", "Computer Vision"],
+                metrics: { accuracy: "%99.4", latency: "2.5ms", nodes: "500 Units" }
+            }
+        };
+
+        function filterProjects(cat) {
+            const btns = document.querySelectorAll('.proj-filter-btn');
+            btns.forEach(btn => {
+                btn.classList.remove('border-cyber-cyan', 'bg-cyber-cyan', 'text-slate-950', 'font-bold');
+                btn.classList.add('border-slate-800', 'bg-slate-900', 'text-slate-400');
+            });
+            event.target.classList.add('border-cyber-cyan', 'bg-cyber-cyan', 'text-slate-950', 'font-bold');
+
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach(card => {
+                if (cat === 'all' || card.getAttribute('data-category') === cat) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openProjectModal(id) {
+            const data = projectData[id];
+            if (!data) return;
+
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <div class="h-44 sm:h-64 rounded-xl overflow-hidden mb-6 relative">
+                    <img src="${data.image}" class="w-full h-full object-cover">
+                    <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-slate-950/80 border border-cyber-cyan text-cyber-cyan text-xs font-mono">${data.category}</span>
+                </div>
+                <h3 class="font-orbitron text-2xl font-bold text-white mb-3">${data.title}</h3>
+                <p class="text-slate-300 text-sm leading-relaxed mb-6">${data.desc}</p>
+                
+                <div class="grid grid-cols-3 gap-4 mb-6 bg-slate-950 p-4 rounded-xl border border-slate-800 text-center font-mono text-xs">
+                    <div>
+                        <div class="text-slate-500">DOĞRULUK</div>
+                        <div class="text-cyber-cyan font-bold text-sm mt-1">${data.metrics.accuracy}</div>
+                    </div>
+                    <div>
+                        <div class="text-slate-500">GECİKME</div>
+                        <div class="text-cyber-purple font-bold text-sm mt-1">${data.metrics.latency}</div>
+                    </div>
+                    <div>
+                        <div class="text-slate-500">DÜĞÜM SAYISI</div>
+                        <div class="text-cyber-magenta font-bold text-sm mt-1">${data.metrics.nodes}</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                    ${data.techs.map(t => `<span class="px-3 py-1 rounded-md bg-slate-900 border border-slate-700 text-slate-300 text-xs font-mono">#${t}</span>`).join('')}
+                </div>
+            `;
+
+            document.getElementById('project-modal').classList.remove('hidden');
+            document.getElementById('project-modal').classList.add('flex');
+        }
+
+        function closeProjectModal() {
+            document.getElementById('project-modal').classList.add('hidden');
+            document.getElementById('project-modal').classList.remove('flex');
+        }
+
+        // -------------------------------------------------------------
+        // 5. TERMINAL CLI SIMULATOR
+        // -------------------------------------------------------------
+        const cliInput = document.getElementById('cli-input');
+        const terminalBody = document.getElementById('terminal-body');
+
+        cliInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = cliInput.value.trim().toLowerCase();
+                if (!cmd) return;
+
+                // Append User Input Line
+                const userLine = document.createElement('div');
+                userLine.innerHTML = `<span class="text-cyber-cyan">visitor@technolab:~$</span> <span>${cmd}</span>`;
+                terminalBody.appendChild(userLine);
+
+                // Process Command
+                const responseLine = document.createElement('div');
+                responseLine.className = 'text-slate-400 pl-4 border-l-2 border-cyber-purple my-1';
+
+                switch(cmd) {
+                    case 'help':
+                        responseLine.innerHTML = `
+                            Mevcut Komutlar:<br>
+                            - <span class="text-cyber-cyan">about</span>: Technolab hakkında bilgi verir.<br>
+                            - <span class="text-cyber-cyan">status</span>: Canlı sistem durumunu gösterir.<br>
+                            - <span class="text-cyber-cyan">projects</span>: Öne çıkan projeleri listeler.<br>
+                            - <span class="text-cyber-cyan">clear</span>: Terminal ekranını temizler.<br>
+                            - <span class="text-cyber-cyan">contact</span>: İletişim bilgilerini verir.
+                        `;
+                        break;
+                    case 'about':
+                        responseLine.innerText = "TECHNOLAB; kuantum hesaplama, yapay zeka ve otonom sistemler üzerine odaklanmış yeni nesil Ar-Ge laboratuvarıdır.";
+                        break;
+                    case 'status':
+                        responseLine.innerHTML = '<span class="text-cyber-emerald">SYSTEM ONLINE</span> | Core Temp: 38°C | Q-Sync: 85% | Threat Level: NONE';
+                        break;
+                    case 'projects':
+                        responseLine.innerHTML = "1. Aegis Quantum Firewall<br>2. Synapse Neural AI Engine<br>3. Chrono Autonomous Drone Swarm";
+                        break;
+                    case 'contact':
+                        responseLine.innerText = "E-posta: contact@technolab.io | Tel: +90 (212) 888 00 00";
+                        break;
+                    case 'clear':
+                        terminalBody.innerHTML = '';
+                        cliInput.value = '';
+                        return;
+                    default:
+                        responseLine.innerText = `'${cmd}' bilinmeyen komut. Kullanılabilir komutları görmek için 'help' yazın.`;
+                }
+
+                terminalBody.appendChild(responseLine);
+                cliInput.value = '';
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            }
+        });
+
+        // -------------------------------------------------------------
+        // 6. GAMER SETUP & BUDGET CALCULATOR LOGIC
+        // -------------------------------------------------------------
+        const budgetSlider = document.getElementById('budget-slider');
+        const budgetInput = document.getElementById('budget-input');
+        const budgetStep = Number(budgetSlider.step);
+        const budgetMin = Number(budgetSlider.min);
+        const budgetMax = Number(budgetSlider.max);
+        const budgetCategories = [
+            { id: 'inc-pc', key: 'pc', label: 'PC', weight: 0.60, bar: 'bar-pc' },
+            { id: 'inc-monitor', key: 'monitor', label: 'Monitör', weight: 0.20, bar: 'bar-mon' },
+            { id: 'inc-peripherals', key: 'peripherals', label: 'Ekipman', weight: 0.12, bar: 'bar-peri' },
+            { id: 'inc-chair', key: 'chair', label: 'Koltuk/Masa', weight: 0.05, bar: 'bar-chair' },
+            { id: 'inc-stream', key: 'stream', label: 'Yayın', weight: 0.03, bar: 'bar-stream' }
+        ];
+        const presetButtons = [...document.querySelectorAll('.budget-preset-btn')];
+
+        function normalizeBudget(value) {
+            const parsed = Number(value);
+            const clamped = Number.isFinite(parsed) ? Math.min(budgetMax, Math.max(budgetMin, parsed)) : budgetMin;
+            return budgetMin + Math.round((clamped - budgetMin) / budgetStep) * budgetStep;
+        }
+
+        function allocateBudget(total, allocations) {
+            const weightTotal = allocations.reduce((sum, item) => sum + item.weight, 0);
+            let remaining = total;
+
+            return allocations.map((item, index) => {
+                const amount = index === allocations.length - 1
+                    ? remaining
+                    : Math.round(total * item.weight / weightTotal);
+                remaining -= amount;
+                return { ...item, amount };
+            });
+        }
+
+        function setBudget(value, notify = false) {
+            const amount = normalizeBudget(value);
+            budgetSlider.value = String(amount);
+            budgetInput.value = String(amount);
+            budgetSlider.setAttribute('aria-valuetext', `${amount.toLocaleString('tr-TR')} TL`);
+            const progress = ((amount - budgetMin) / (budgetMax - budgetMin)) * 100;
+            budgetSlider.style.setProperty('--budget-progress', `${progress}%`);
+
+            const activePreset = presetButtons.find(button => Number(button.dataset.budget) === amount);
+            presetButtons.forEach(button => button.setAttribute('aria-pressed', String(button === activePreset)));
+            document.getElementById('preset-badge').innerText = activePreset ? activePreset.dataset.mode : 'ÖZEL';
+
+            calculateSetup();
+            if (notify) {
+                showToast(`Setup bütçesi ${amount.toLocaleString('tr-TR')} TL olarak ayarlandı.`);
+            }
+        }
+
+        function setBudgetPreset(amount) {
+            setBudget(amount, true);
+        }
+
+        budgetSlider.addEventListener('input', () => setBudget(budgetSlider.value));
+        budgetInput.addEventListener('change', () => setBudget(budgetInput.value));
+        presetButtons.forEach(button => {
+            button.addEventListener('click', () => setBudgetPreset(button.dataset.budget));
+        });
+        budgetCategories.forEach(category => {
+            document.getElementById(category.id).addEventListener('change', calculateSetup);
+        });
+        document.getElementById('refresh-setup').addEventListener('click', calculateSetup);
+
+        function calculateSetup() {
+            const budget = Number(budgetSlider.value);
+            const selectedCategories = budgetCategories
+                .filter(category => document.getElementById(category.id).checked);
+            const categoryAllocations = allocateBudget(budget, selectedCategories);
+            const allocationByKey = new Map(categoryAllocations.map(item => [item.key, item.amount]));
+            const partsContainer = document.getElementById('setup-parts-list');
+            const allocationRatios = document.getElementById('allocation-ratios');
+            const allocationBar = document.getElementById('allocation-bar');
+            const allocationItems = [];
+            const parts = [];
+
+            partsContainer.innerHTML = '';
+
+            budgetCategories.forEach(category => {
+                const amount = allocationByKey.get(category.key) || 0;
+                const share = budget ? (amount / budget) * 100 : 0;
+                document.getElementById(category.bar).style.width = `${share}%`;
+                if (amount > 0) {
+                    allocationItems.push({ label: category.label, share, amount });
+                }
+            });
+
+            const roundedShares = allocationItems.map((item, index) => index === allocationItems.length - 1
+                ? 100 - allocationItems.slice(0, index).reduce((sum, previous) => sum + Math.round(previous.share), 0)
+                : Math.round(item.share));
+            allocationRatios.innerText = allocationItems.length
+                ? allocationItems.map((item, index) => `${item.label} %${roundedShares[index]}`).join(' | ')
+                : 'Kategori seçilmedi';
+            allocationBar.setAttribute('aria-label', allocationItems.length
+                ? `Bütçe dağılımı: ${allocationItems.map((item, index) => `${item.label} yüzde ${roundedShares[index]}`).join(', ')}`
+                : 'Bütçe dağılımı: kategori seçilmedi');
+            document.getElementById('setup-score').innerText = `Dağılım: %${allocationItems.length ? 100 : 0}`;
+
+            const pcBudget = allocationByKey.get('pc') || 0;
+            if (pcBudget) {
+                let pcParts;
+                if (pcBudget < 25000) {
+                    pcParts = [
+                        { cat: 'Ekran Kartı (GPU)', name: 'NVIDIA RTX 4060 8GB / RX 7600', weight: 0.45, icon: 'fa-microchip' },
+                        { cat: 'İşlemci (CPU)', name: 'AMD Ryzen 5 5600 / Intel i5 12400F', weight: 0.22, icon: 'fa-atom' },
+                        { cat: 'RAM & SSD', name: '16GB DDR4 3600MHz + 512GB NVMe SSD', weight: 0.18, icon: 'fa-memory' },
+                        { cat: 'Anakart & PSU & Kasa', name: 'B550M / H610M + 650W 80+ Kasa', weight: 0.15, icon: 'fa-box' }
+                    ];
+                } else if (pcBudget < 50000) {
+                    pcParts = [
+                        { cat: 'Ekran Kartı (GPU)', name: 'NVIDIA RTX 4070 Super 12GB', weight: 0.48, icon: 'fa-microchip' },
+                        { cat: 'İşlemci (CPU)', name: 'AMD Ryzen 7 7800X3D (Gaming King)', weight: 0.22, icon: 'fa-atom' },
+                        { cat: 'RAM & SSD', name: '32GB DDR5 6000MHz + 1TB PCIe 4.0 SSD', weight: 0.16, icon: 'fa-memory' },
+                        { cat: 'Soğutma & Kasa', name: '240mm Sıvı Soğutma + 750W Gold PSU', weight: 0.14, icon: 'fa-fan' }
+                    ];
+                } else {
+                    pcParts = [
+                        { cat: 'Ekran Kartı (GPU)', name: 'NVIDIA RTX 4080 Super / RTX 4090 24GB', weight: 0.50, icon: 'fa-microchip' },
+                        { cat: 'İşlemci (CPU)', name: 'AMD Ryzen 9 7950X3D / Intel i9 14900K', weight: 0.22, icon: 'fa-atom' },
+                        { cat: 'RAM & SSD', name: '64GB DDR5 6400MHz + 2TB Gen4 SSD (7000MB/s)', weight: 0.15, icon: 'fa-memory' },
+                        { cat: 'Soğutma & Premium Kasa', name: '360mm LCD Sıvı Soğutma + 1000W Platinum PSU', weight: 0.13, icon: 'fa-fan' }
+                    ];
+                }
+                parts.push(...allocateBudget(pcBudget, pcParts).map(part => ({
+                    cat: part.cat, name: part.name, price: part.amount, icon: part.icon
+                })));
+            }
+
+            const monitorBudget = allocationByKey.get('monitor') || 0;
+            if (monitorBudget) {
+                const monitor = pcBudget < 25000
+                    ? '24" 165Hz 1ms IPS Full HD Oyuncu Monitörü'
+                    : pcBudget < 50000
+                        ? '27" 2K 180Hz 0.5ms Fast-IPS Kavisli Monitör'
+                        : '34" OLED UltraWide 240Hz 0.03ms 4K Gaming Monitör';
+                parts.push({ cat: 'Monitör', name: monitor, price: monitorBudget, icon: 'fa-desktop' });
+            }
+
+            const peripheralsBudget = allocationByKey.get('peripherals') || 0;
+            if (peripheralsBudget) {
+                const peripherals = allocateBudget(peripheralsBudget, [
+                    { weight: 0.55, cat: 'Mekanik Klavye & Mouse', name: 'Kablosuz Optik Gaming Mouse + RGB Mekanik Klavye', icon: 'fa-keyboard' },
+                    { weight: 0.45, cat: 'Kulaklık & Ses', name: '7.1 Surround Kablosuz Oyuncu Kulaklığı', icon: 'fa-headset' }
+                ]);
+                parts.push(...peripherals.map(part => ({
+                    cat: part.cat, name: part.name, price: part.amount, icon: part.icon
+                })));
+            }
+
+            const chairBudget = allocationByKey.get('chair') || 0;
+            if (chairBudget) {
+                parts.push({ cat: 'Koltuk & Masa', name: 'Ergonomik Profesyonel Oyuncu Koltuğu + Karbon Masa', price: chairBudget, icon: 'fa-chair' });
+            }
+
+            const streamBudget = allocationByKey.get('stream') || 0;
+            if (streamBudget) {
+                parts.push({ cat: 'Yayın Ekipmanı', name: 'Stüdyo Kondanser Mikrofon + 1080p60 Pro Cam & KeyLight', price: streamBudget, icon: 'fa-video' });
+            }
+
+            if (!parts.length) {
+                const emptyState = document.createElement('p');
+                emptyState.className = 'rounded-xl border border-dashed border-slate-700 p-6 text-center text-sm text-slate-400';
+                emptyState.innerText = 'Öneri oluşturmak için en az bir ekipman kategorisi seç.';
+                partsContainer.appendChild(emptyState);
+            }
+
+            let calculatedTotal = 0;
+            parts.forEach(item => {
+                calculatedTotal += item.price;
+                const div = document.createElement('div');
+                div.className = 'glass-card p-3.5 rounded-xl flex items-center justify-between border-slate-800 hover:border-cyber-cyan/40 transition-colors';
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-cyber-cyan">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-500 uppercase">${item.cat}</div>
+                            <div class="text-xs font-bold text-slate-200">${item.name}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-orbitron font-bold text-cyber-cyan">${item.price.toLocaleString('tr-TR')} TL</div>
+                    </div>
+                `;
+                partsContainer.appendChild(div);
+            });
+
+            document.getElementById('total-calculated-price').innerText = calculatedTotal.toLocaleString('tr-TR') + ' TL';
+            document.getElementById('fps-estimate').innerText = pcBudget
+                ? pcBudget < 25000 ? '1080p / Yüksek' : pcBudget < 50000 ? '2K / Yüksek' : '4K / Üst seviye'
+                : 'PC seçilmedi';
+        }
+
+        setBudget(budgetSlider.value);
+  
+        function copySetupToClipboard() {
+            const total = document.getElementById('total-calculated-price').innerText;
+            const text = `TECHNOLAB Gamer Setup Konfigürasyonu (Toplam Bütçe: ${total})\nDetaylar hazırlanıp kopyalandı!`;
+            
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast('Setup bileşen listesi panoya kopyalandı!');
+        }
+
+        function openSpecialOfferModal() {
+            showToast('Sistem konfigürasyonu alındı! Özel fiyat teklifi sayfasına yönlendiriliyorsunuz.');
+            setTimeout(() => {
+                document.getElementById('iletisim').scrollIntoView({ behavior: 'smooth' });
+            }, 1000);
+        }
+
+        // Run calculation on load
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateSetup();
+        });
+
+        // -------------------------------------------------------------
+        // 7. GENERAL UTILITIES (Form, Toast & Mobile Nav)
+        // -------------------------------------------------------------
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showToast('Mesajınız başarıyla laboratuvara iletildi!');
+            e.target.reset();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3500);
+        }
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileBtn.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.toggle('hidden');
+            mobileBtn.setAttribute('aria-expanded', String(isOpen));
+            mobileBtn.setAttribute('aria-label', isOpen ? 'Menüyü kapat' : 'Menüyü aç');
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileBtn.setAttribute('aria-expanded', 'false');
+                mobileBtn.setAttribute('aria-label', 'Menüyü aç');
+            });
+        });
+    </script>
+</body>
+</html>
